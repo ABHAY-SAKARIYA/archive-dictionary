@@ -41,3 +41,12 @@ class File:
             dataexcel = pd.read_excel(filename)
             return dataexcel
         
+    class Text:
+        def write(filename : str,
+                  data : str) -> None:
+            with open(filename,"a+") as writeText:
+                writeText.write(data)
+        def read(filename : str) -> str:
+            with open(filename,"r") as readText:
+                dataText = readText.read()
+            return dataText

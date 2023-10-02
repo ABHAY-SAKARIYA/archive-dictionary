@@ -39,7 +39,7 @@ class dictionary:
 
     # pdfs found with download link 31079 
     def download(self) -> None:
-        
+
         links = File.Json.read(filename="downloadLink.json")
         op = webdriver.ChromeOptions()
         p = {
@@ -59,58 +59,62 @@ class dictionary:
             soup = BeautifulSoup(driver.page_source,"html.parser")
 
             sleep(5)
+            clickCount = 0
+            try:
+                for data in soup.select("pre a"):
+                    pdf = data.text
 
-            for data in soup.select("pre a"):
-                pdf = data.text
-                print(pdf)
-                print(pdf," : ",len(pdf))
-
-                if ".pdf" in pdf or ".rar" in pdf:
-                    driver.find_element(By.XPATH,f"//a[@href='{data.get('href')}']").click()
-                else:
-                    pass
-
-            sleep(10)
-
-            dir_path = r"D:\Abhay\archieve\Dictionary\28-09-23-dictionary"
-            stop = True
-
-            while stop == True:
-
-                filesinfolder = os.listdir(dir_path)
-                index = 0
-                unconfirm = 0
-                file_count = 0
-                minused = False
-
-                for f in filesinfolder:
-
-                    if "unconfirmed" in f.lower():
-                        unconfirm = index
-                    else:
-                        index+=1
-                    file_count+=1
-                
-                check = file_count
-                print(f"FileName : {filesinfolder[unconfirm]}")
-
-                if "unconfirmed" in filesinfolder[unconfirm].lower():
-                    if minused == False:
-                        file_count-=1
-                        minused = True
+                    if clickCount == 0:
+                        if ".pdf" in pdf or ".rar" in pdf:
+                            driver.find_element(By.XPATH,f"//a[@href='{data.get('href')}']").click()
+                            clickCount+=1
+                        else:
+                            pass
                     else:
                         pass
-                else:
-                    file_count+=1
 
-                print(f"Range Of File Found : {check}\nRange Of File - Unconfirmed File : {file_count}")
-                if file_count <= check:
-                    sleep(20)
-                else:
-                    stop = False
+                sleep(10)
 
-            print(f"Files Downloaded : {count}")
-            count+=1
+                dir_path = r"D:\Abhay\archieve\Dictionary\28-09-23-dictionary"
+                stop = True
+                while stop == True:
+
+                    filesinfolder = os.listdir(dir_path)
+                    index = 0
+                    unconfirm = 0
+                    file_count = 0
+                    minused = False
+
+                    for f in filesinfolder:
+
+                        if "unconfirmed" in f.lower():
+                            unconfirm = index
+                        else:
+                            index+=1
+                        file_count+=1
+                    
+                    check = file_count
+                    print(f"FileName : {filesinfolder[unconfirm]}")
+
+                    if "unconfirmed" in filesinfolder[unconfirm].lower():
+                        if minused == False:
+                            file_count-=1
+                            minused = True
+                        else:
+                            pass
+                    else:
+                        file_count+=1
+
+                    print(f"Range Of File Found : {check}\nRange Of File - Unconfirmed File : {file_count}")
+                    if file_count <= check:
+                        sleep(20)
+                    else:
+                        stop = False
+
+                print(f"Files Downloaded : {count}")
+                count+=1
+            except:
+                File.Text.write(filename="DownloadError.txt",data=link)
 
 
 obj1 = dictionary()
