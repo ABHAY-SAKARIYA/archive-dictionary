@@ -38,7 +38,8 @@ class dictionary:
         
 
     # pdfs found with download link 31079 
-    def download(self):
+    def download(self) -> None:
+        
         links = File.Json.read(filename="downloadLink.json")
         op = webdriver.ChromeOptions()
         p = {
@@ -48,30 +49,42 @@ class dictionary:
         }
         op.add_experimental_option("prefs", p)
         driver = webdriver.Chrome(options=op)
+
         sleep(30)
         count = 0			
+
         for link in links[1:10:1]:  
+
             driver.get(link)
             soup = BeautifulSoup(driver.page_source,"html.parser")
+
             sleep(5)
+
             for data in soup.select("pre a"):
                 pdf = data.text
                 print(pdf)
                 print(pdf," : ",len(pdf))
+
                 if ".pdf" in pdf or ".rar" in pdf:
                     driver.find_element(By.XPATH,f"//a[@href='{data.get('href')}']").click()
                 else:
                     pass
+
             sleep(10)
+
             dir_path = r"D:\Abhay\archieve\Dictionary\28-09-23-dictionary"
             stop = True
+
             while stop == True:
+
                 filesinfolder = os.listdir(dir_path)
                 index = 0
                 unconfirm = 0
                 file_count = 0
                 minused = False
+
                 for f in filesinfolder:
+
                     if "unconfirmed" in f.lower():
                         unconfirm = index
                     else:
@@ -80,6 +93,7 @@ class dictionary:
                 
                 check = file_count
                 print(f"FileName : {filesinfolder[unconfirm]}")
+
                 if "unconfirmed" in filesinfolder[unconfirm].lower():
                     if minused == False:
                         file_count-=1
@@ -88,14 +102,14 @@ class dictionary:
                         pass
                 else:
                     file_count+=1
+
                 print(f"Range Of File Found : {check}\nRange Of File - Unconfirmed File : {file_count}")
                 if file_count <= check:
                     sleep(20)
                 else:
                     stop = False
+
             print(f"Files Downloaded : {count}")
-            
-            
             count+=1
 
 
