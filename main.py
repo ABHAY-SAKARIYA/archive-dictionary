@@ -53,7 +53,7 @@ class dictionary:
         sleep(30)
         count = 0			
 
-        for link in links[1:10:1]:  
+        for link in links[6:10:1]:  
 
             driver.get(link)
             soup = BeautifulSoup(driver.page_source,"html.parser")
