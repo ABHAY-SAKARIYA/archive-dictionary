@@ -20,7 +20,7 @@ class dictionary:
         for index,row in data.iterrows():
             if row["mediatype"] == "texts":
                 if "dictionary" in row["title"].lower():
-                    if str(row["language"]).lower() == "english" or str(row["language"]).lower() == "hindi" or str(row["language"]).lower() == "gujarati" or str(row["language"]).lower() == "sanskrit" or str(row['language']).lower() == "eng":
+                    if str(row["language"]).lower() == "english" or str(row["language"]).lower() == "hindi" or str(row["language"]).lower() == "gujarati" or str(row["language"]).lower() == "sanskrit" or str(row['language']).lower() == "eng" or str(row['language']).lower() == "guj" or str(row['language']).lower() == "hin" or str(row['language']).lower() == "san":
                         createLink = f"http://archive.org/download/{row['identifier']}"
                         revisedData.append(createLink)
                         count+=1
@@ -31,7 +31,7 @@ class dictionary:
         print(count)
         try:
             File.Json.write(filename="downloadLink.json",data=revisedData)
-            print("Saved To File1")
+            print("Saved To File!")
         except TypeError as e:
             print(e)
 
@@ -118,5 +118,5 @@ class dictionary:
 
 
 obj1 = dictionary()
-obj1.download()
-# obj1.filterData()
+obj1.filterData()
+# obj1.download()
