@@ -1,11 +1,12 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
+import os
 from time import sleep
 from filemanager import File
-import os
+from bs4 import BeautifulSoup
+from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 
 class dictionary:
 
@@ -43,7 +44,7 @@ class dictionary:
         links = File.Json.read(filename="downloadLink.json")
         op = webdriver.ChromeOptions()
         p = {
-            "download.default_directory":r"D:\Abhay\archieve\Dictionary\28-09-23-dictionary", 
+            "download.default_directory":r"download_path", 
         "safebrowsing.enabled":"false",
         "plugins.always_open_pdf_externally": True
         }
@@ -60,6 +61,7 @@ class dictionary:
 
             sleep(5)
             clickCount = 0
+            sleepCount = 0
             try:
                 for data in soup.select("pre a"):
                     pdf = data.text
@@ -75,7 +77,7 @@ class dictionary:
 
                 sleep(10)
 
-                dir_path = r"D:\Abhay\archieve\Dictionary\28-09-23-dictionary"
+                dir_path = r"download_path"
                 stop = True
                 while stop == True:
 
@@ -107,14 +109,22 @@ class dictionary:
 
                     print(f"Range Of File Found : {check}\nRange Of File - Unconfirmed File : {file_count}")
                     if file_count <= check:
-                        sleep(20)
+                        if sleepCount >= 6:
+                            stop = False
+                            File.Text.write(filename="DownloadError.txt",data=f"{link}\n")
+                        else:
+                            sleep(20)
+                            sleepCount += 1
                     else:
                         stop = False
-
-                print(f"Files Downloaded : {count}")
+                now = datetime.now()
+                download_time = now.strftime("%H : %M : %S")
+                print(f"Files Downloaded : {count} \n Time :- {download_time}")
+                File.Text.write(filename="DownloadCounf.txt",data=f"Time :- {download_time} : Count :- {count}")
                 count+=1
             except:
-                File.Text.write(filename="DownloadError.txt",data=link)
+                File.Text.write(filename="DownloadError.txt",data=f"{link}\n")
+                continue
 
 
 obj1 = dictionary()
