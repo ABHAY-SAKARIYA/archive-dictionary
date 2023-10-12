@@ -22,7 +22,7 @@ class dictionary:
             if row["mediatype"] == "texts":
                 if "dictionary" in row["title"].lower():
                     if str(row["language"]).lower() == "english" or str(row["language"]).lower() == "hindi" or str(row["language"]).lower() == "gujarati" or str(row["language"]).lower() == "sanskrit" or str(row['language']).lower() == "eng" or str(row['language']).lower() == "guj" or str(row['language']).lower() == "hin" or str(row['language']).lower() == "san":
-                        createLink = f"http://archive.org/download/{row['identifier']}"
+                        createLink = f"{row['identifier']}"
                         revisedData.append(createLink)
                         count+=1
                 else:
@@ -31,7 +31,7 @@ class dictionary:
                 continue
         print(count)
         try:
-            File.Json.write(filename="downloadLink.json",data=revisedData)
+            File.Json.write(filename="downloadLinkIdentifiers.json",data=revisedData)
             print("Saved To File!")
         except TypeError as e:
             print(e)
